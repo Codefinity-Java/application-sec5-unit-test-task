@@ -5,6 +5,7 @@ import com.codefinity.firstrestapibookssec4.dto.BookResponseDTO;
 import com.codefinity.firstrestapibookssec4.exception.ApiException;
 import com.codefinity.firstrestapibookssec4.model.Book;
 import com.codefinity.firstrestapibookssec4.repositroy.BookRepository;
+import com.codefinity.firstrestapibookssec4.service.impl.BookServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -26,7 +27,7 @@ public class BookServiceTest {
     private BookRepository bookRepository;
 
     @InjectMocks
-    private BookService bookService;
+    private BookServiceImpl bookService;
 
     @BeforeEach
     void setUp() {
@@ -168,9 +169,44 @@ public class BookServiceTest {
 
     //----findByAuthor----
 
-    //TODO: You need to implement 2 tests for the `findByAuthor` method of the service:
-    // 1.When the list of entities by the given author's name is not empty.
-    // 2.When the list of entities by the given author's name is empty.
+    @Test
+    void testFindByAuthor_whenBooksExist_shouldReturnListOfBookResponseDTO() {
+        Book modelBook = new Book();
+        modelBook.setId("1");
+        modelBook.setName("Sample Book");
+        modelBook.setAuthor("Author Name");
+        modelBook.setPrice("10.99");
+
+        BookResponseDTO responseDTO = new BookResponseDTO();
+        responseDTO.setId("1");
+        responseDTO.setName("Sample Book");
+        responseDTO.setAuthor("Author Name");
+        responseDTO.setPrice("10.99");
+
+        when(bookRepository.findBookByAuthor("Author Name")).thenReturn(List.of(modelBook));
+
+        List<BookResponseDTO> expectedResponse = List.of(responseDTO);
+
+        List<BookResponseDTO> result = bookService.findByAuthor("Author Name");
+
+        assertNotNull(result);
+        assertEquals(expectedResponse.size(), result.size());
+        assertEquals(expectedResponse, result);
+
+        verify(bookRepository).findBookByAuthor("Author Name");
+    }
+
+    @Test
+    void testFindByAuthor_whenNoBooksExist_shouldReturnEmptyList() {
+        when(bookRepository.findBookByAuthor("Nonexistent Author")).thenReturn(Collections.emptyList());
+
+        List<BookResponseDTO> result = bookService.findByAuthor("Nonexistent Author");
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+
+        verify(bookRepository).findBookByAuthor("Nonexistent Author");
+    }
 
     //----deleteBook----
 

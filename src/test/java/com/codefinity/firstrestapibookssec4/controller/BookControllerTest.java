@@ -144,8 +144,35 @@ public class BookControllerTest {
 
     //----findByAuthor----
 
-    //TODO: You need to implement 2 tests for the `findByAuthor` method of the controller:
-    // 1.When the list of entities by the given author's name is not empty.
-    // 2.When the list of entities by the given author's name is empty.
+    @Test
+    void testFindByAuthor_whenBooksExist_shouldReturnBookList() throws Exception {
+        String author = bookResponseDTO.getAuthor();
+
+        when(bookService.findByAuthor(author))
+                .thenReturn(List.of(bookResponseDTO));
+
+        mockMvc.perform(get("/books/author/{author}", author))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id").value(bookResponseDTO.getId()))
+                .andExpect(jsonPath("$[0].name").value(bookResponseDTO.getName()))
+                .andExpect(jsonPath("$[0].author").value(bookResponseDTO.getAuthor()))
+                .andExpect(jsonPath("$[0].price").value(bookResponseDTO.getPrice()));
+
+        verify(bookService).findByAuthor(author);
+    }
+
+    @Test
+    void testFindByAuthor_whenNoBooksExist_shouldReturnEmptyList() throws Exception {
+        String author = "Nonexistent Author";
+
+        when(bookService.findByAuthor(author)).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/books/author/{author}", author))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+
+        verify(bookService).findByAuthor(author);
+    }
 
 }
