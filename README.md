@@ -8,7 +8,7 @@
 <h2>Repository Testing</h2>
 
 <h3>Existing Tests</h3>
-<p>There are already tests written for the <code>findAllBooks</code>, <code>createBook</code>, and <code>updateBook</code> methods. You'll need to write tests for the other methods. Below are some guidelines for testing the remaining methods.</p>
+<p>There are already tests written for the <code>findAllBooks</code>, <code>createBook</code>, <code>findByAuthor</code> and <code>updateBook</code> methods. You'll need to write tests for the other methods. Below are some guidelines for testing the remaining method.</p>
 
 <h3>deleteBooks(String id)</h3>
 <ul>
@@ -18,19 +18,7 @@
     <li>When an error occurs, check both the status code and the error message.</li>
 </ul>
 
-<h3>findByAuthor(String author)</h3>
-<ul>
-    <li>Verify that a list of books is returned for the specified author.</li>
-    <li>Ensure that the method handles cases where no books are found for the given author.</li>
-</ul>
-
 <h2>Service Testing</h2>
-
-<h3>findByAuthor(String author)</h3>
-<ul>
-    <li>Ensure that a list of books is returned for the specified author.</li>
-    <li>Test the scenario where no books exist for the given author, and confirm that an empty list is returned.</li>
-</ul>
 
 <h3>deleteBook(String id)</h3>
 <ul>
